@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&display=swap');
+
+@import "tailwindcss";
+
+*{
+  font-family: "Nunito", sans-serif;
+}
+
+@layer base {
+    button {
+        @apply cursor-pointer;
+        
+    }
+}
+
+.no-scrollbar::-webkit-scrollbar{
+    display: none;
+}
+
+@keyframes fade-in{
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.animate-fade-in{
+    animation: fade-in 0.8s ease-out;
+}
+
+@layer utilities {
+  .scrollbar-none {
+    -ms-overflow-style: none;   /* IE & Edge */
+    scrollbar-width: none;      /* Firefox */
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;              /* Chrome, Safari */
+  }
+}
+
+@layer utilities {
+  .firefly {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: rgba(163, 230, 53, 0.8);
+    box-shadow:
+      0 0 8px rgba(163, 230, 53, 0.8),
+      0 0 20px rgba(163, 230, 53, 0.6);
+    animation: firefly-float linear infinite;
+  }
+
+  @keyframes firefly-float {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0.2;
+    }
+    30% {
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-120px) translateX(60px);
+      opacity: 0;
+    }
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out;
+}
