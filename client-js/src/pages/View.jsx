@@ -24,7 +24,7 @@ const View = () => {
 
   useEffect(() => {
     fetchCode();
-  }, [projectId]);
+  }, []);
 
   if (loading) {
     return (
