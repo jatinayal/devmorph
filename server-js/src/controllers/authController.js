@@ -71,14 +71,15 @@ export const login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res
-      .status(200)
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      })
+res
+  .status(200)
+  .cookie("token", token, {
+    httpOnly: true,
+    secure: true,        
+    sameSite: "None",   
+    path: "/",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  })
       .json({
         message: "Login successful",
         user: {
