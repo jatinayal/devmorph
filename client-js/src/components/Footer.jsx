@@ -74,7 +74,7 @@ const Footer = () => {
           </h4>
           <div className="flex items-center gap-4">
             <a
-              href="#"
+              href="https://github.com/jatinayal/devmorph"
               className="p-2 rounded-lg border border-white/10 text-white/60 hover:text-lime-400 hover:border-lime-400/50 transition"
             >
               <Github size={18} />
@@ -86,7 +86,7 @@ const Footer = () => {
               <Twitter size={18} />
             </a>
             <a
-              href="#"
+              href="www.linkedin.com/in/jatin-nayal-300438353"
               className="p-2 rounded-lg border border-white/10 text-white/60 hover:text-lime-400 hover:border-lime-400/50 transition"
             >
               <Linkedin size={18} />
