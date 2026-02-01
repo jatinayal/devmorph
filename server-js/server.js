@@ -47,16 +47,16 @@ app.use("/api/project", projectRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/admin", adminRouter);
 
-/* -------------------- Frontend Serve (IMPORTANT) -------------------- */
 const __dirname = path.resolve();
 
 // serve React build
 app.use(express.static(path.join(__dirname, "client-js/dist")));
 
-// React Router fallback (MUST be last)
-app.get("*", (req, res) => {
+// React Router fallback — Express 5 safe
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, "client-js/dist/index.html"));
 });
+
 
 /* -------------------- Start Server -------------------- */
 app.listen(port, () => {
