@@ -135,10 +135,11 @@ const [loadingTextIndex, setLoadingTextIndex] = useState(0);
         {project.current_code ? (
           <>
             <iframe
-              ref={iframeRef}
-              srcDoc={injectPreview(project.current_code)}
-              className={`h-full ${resolutions[device]} mx-auto`}
-            />
+  ref={iframeRef}
+  srcDoc={injectPreview(project.current_code)}
+  className={`w-full h-screen ${resolutions[device]} mx-auto border-none`}
+  sandbox="allow-scripts allow-same-origin"
+/>
 
             {showEditorPanel && selectedElement && (
               <EditorPanel

@@ -1,10 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { getPublishedProject } from '../features/project/projectThunk'
-import { Loader2Icon } from 'lucide-react';
-import ProjectPreview from '../components/ProjectPreview';
-
 const View = () => {
   const { projectId } = useParams();
   const [code, setCode] = useState('');
@@ -12,19 +5,22 @@ const View = () => {
   const dispatch = useDispatch();
 
   const fetchCode = async () => {
-  try {
-    const { project: { code, name, creator } } = await dispatch(getPublishedProject({ projectId })).unwrap();
-    setCode(code);
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      const {
+        project: { code }
+      } = await dispatch(getPublishedProject({ projectId })).unwrap();
+
+      setCode(code);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchCode();
-  }, []);
+  }, [projectId]);
 
   if (loading) {
     return (
@@ -35,7 +31,7 @@ const View = () => {
   }
 
   return (
-    <div className="h-screen">
+    <div className="h-screen flex flex-col bg-black">
       {code && (
         <ProjectPreview
           project={{ current_code: code }}
@@ -46,5 +42,3 @@ const View = () => {
     </div>
   );
 };
-
-export default View;
