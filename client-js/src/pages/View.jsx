@@ -1,3 +1,10 @@
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPublishedProject } from '../features/project/projectThunk'
+import { Loader2Icon } from 'lucide-react';
+import ProjectPreview from '../components/ProjectPreview';
+
 const View = () => {
   const { projectId } = useParams();
   const [code, setCode] = useState('');
@@ -42,3 +49,6 @@ const View = () => {
     </div>
   );
 };
+
+
+export default View;
