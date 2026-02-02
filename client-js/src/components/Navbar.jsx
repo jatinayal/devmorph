@@ -18,6 +18,7 @@ const Navbar = () => {
   const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
+    console.log(import.meta.env.VITE_BASEURL)
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
     }
@@ -157,7 +158,7 @@ const Navbar = () => {
                         <p className="text-sm text-white/90 truncate mt-0.5">{user.email}</p>
                       </div>
                       <div className="p-1.5">
-                        
+
                         <button
                           onClick={handleLogout}
                           className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
