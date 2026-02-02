@@ -50,11 +50,11 @@ app.use("/api/admin", adminRouter);
 const __dirname = path.resolve();
 
 // serve React build
-app.use(express.static(path.join(__dirname, "client-js/dist")));
+app.use(express.static(path.join(__dirname, "../client-js/dist")));
 
 // React Router fallback — Express 5 safe
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "client-js/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../client-js/dist/index.html"));
 });
 
 
