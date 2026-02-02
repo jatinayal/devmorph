@@ -127,10 +127,10 @@ export const getPublishedProject = createAsyncThunk(
   async ({ projectId }) => {
     try {
       const res = await fetch(`${API}/project/projects/published/${projectId}`, {
-  method: 'GET',
-  headers: { 'Content-Type': 'application/json' },
-  credentials: 'include',
-});
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
@@ -150,7 +150,7 @@ export const fetchProjects = createAsyncThunk(
         { credentials: 'include' }
       );
 
-       const data = await res.json();
+      const data = await res.json();
       if (!res.ok) throw new Error('Fetch failed');
       return data;
     } catch (err) {
