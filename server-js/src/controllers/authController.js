@@ -2,6 +2,15 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+/* ================= SHARED COOKIE CONFIG ================= */
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+};
+
 /* ================= SIGNUP ================= */
 export const signup = async (req, res) => {
   try {
@@ -25,7 +34,14 @@ export const signup = async (req, res) => {
       password: hashedPassword,
     });
 
-    res.status(201).json({
+    // Auto-login: set cookie after signup
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET || "jatin",
+      { expiresIn: "7d" }
+    );
+
+    res.status(201).cookie("token", token, COOKIE_OPTIONS).json({
       message: "Signup successful",
       user: {
         id: user._id,
@@ -71,15 +87,9 @@ export const login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-res
-  .status(200)
-  .cookie("token", token, {
-    httpOnly: true,
-    secure: true,        
-    sameSite: "None",   
-    path: "/",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  })
+    res
+      .status(200)
+      .cookie("token", token, COOKIE_OPTIONS)
       .json({
         message: "Login successful",
         user: {
@@ -99,8 +109,9 @@ export const logout = async (_req, res) => {
   res
     .clearCookie("token", {
       httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
+      sameSite: "None",
+      path: "/",
     })
     .status(200)
     .json({ message: "Logout successful" });
@@ -122,18 +133,18 @@ export const getUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
- 
+
     res.status(200).json({
       message: "Login successful",
-        user: {
-          id: user._id,
-      name: user.name,
-      email: user.email,
-      totalCreation: user.totalCreation,
-      credits: user.credits,
-      emailVerified: user.emailVerified,
-      createdAt: user.createdAt,
-        }
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        totalCreation: user.totalCreation,
+        credits: user.credits,
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt,
+      }
     });
   } catch (error) {
     console.error("GET USER ERROR 👉", error);
