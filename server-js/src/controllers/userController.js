@@ -25,10 +25,10 @@ export const getUserCredits = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
- 
+
 /* =========================
    Create New Project
-========================= */ 
+========================= */
 export const createUserProject = async (req, res) => {
   const userId = req.userId;
   try {
@@ -69,30 +69,29 @@ export const createUserProject = async (req, res) => {
 
 
     /* ===== Prompt Enhancement ===== */
-    
+
     const ai = new GoogleGenAI({ apiKey: process.env.GEMNI });
-    
-   async function generateAIResponse(prompt) {
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: prompt }]
-        }
-      ],
-    });
 
-    return response.text;
-  } catch (error) {
-    console.error("Error generating AI response:", error);
-    return "Sorry, I'm having trouble responding right now. Please try again later.";
-  }
-}
+    async function generateAIResponse(prompt) {
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }]
+          }
+        ],
+      });
+
+      if (!response.text || !response.text.trim()) {
+        throw new Error("GEMINI_RETURNED_EMPTY_RESPONSE");
+      }
+
+      return response.text;
+    }
 
 
-     const prompt = `You are a prompt enhancement specialist. Take the user's website request and expand it into a detailed, comprehensive prompt that will help create the best possible website.
+    const prompt = `You are a prompt enhancement specialist. Take the user's website request and expand it into a detailed, comprehensive prompt that will help create the best possible website.
 
     Enhance this prompt by:
     1. Adding specific design details (layout, color scheme, typography)
@@ -105,13 +104,13 @@ export const createUserProject = async (req, res) => {
 here is user prompt ${initial_prompt}    
 Return ONLY the enhanced prompt, nothing else. Make it detailed but concise (1-2 paragraphs max).`;
 
-   const enhanceResponse = await generateAIResponse(prompt);
+    const enhanceResponse = await generateAIResponse(prompt);
 
     const enhancedPrompt = enhanceResponse
     if (!enhanceResponse || !enhanceResponse.trim()) {
-  throw new Error('GEMINI_AI_GENERATION_FAILED');
-}
-    if(enhanceResponse){
+      throw new Error('GEMINI_AI_GENERATION_FAILED');
+    }
+    if (enhanceResponse) {
     }
 
     project.conversations.push(
@@ -126,16 +125,16 @@ Return ONLY the enhanced prompt, nothing else. Make it detailed but concise (1-2
     );
 
 
-await project.save(); 
+    await project.save();
 
-return res.status(201).json({
-  success: true,
-  enhanceResponse,
-  project,
-  message: 'Enhanced prompt successfully',
-});
+    return res.status(201).json({
+      success: true,
+      enhanceResponse,
+      project,
+      message: 'Enhanced prompt successfully',
+    });
 
-     
+
   } catch (error) {
     await User.findByIdAndUpdate(userId, {
       $inc: { credits: 5 },
@@ -148,14 +147,14 @@ return res.status(201).json({
 
 /* =========================
    Create Project Code
-========================= */ 
+========================= */
 export const createProjectCode = async (req, res) => {
   const userId = req.userId;
   try {
     const { enhanceResponse, projectId } = req.body;
 
 
-        if (!userId) {
+    if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
@@ -167,17 +166,17 @@ export const createProjectCode = async (req, res) => {
         .json({ message: "Add credits to create more projects" });
     }
 
-   const project = await WebsiteProject.findOne({
+    const project = await WebsiteProject.findOne({
       _id: projectId,
       userId,
     });
-    
+
 
     user.totalCreation += 1;
     user.credits -= 5;
     await user.save();
 
-     const enhancedPrompt = enhanceResponse
+    const enhancedPrompt = enhanceResponse
 
     /* ===== Code Generation ===== */
     const codeResponse = await openai.chat.completions.create({
@@ -185,7 +184,7 @@ export const createProjectCode = async (req, res) => {
       messages: [
         {
           role: "system",
-           content: `You are an expert web developer.
+          content: `You are an expert web developer.
 
 Create a complete, production-ready, single-page website based on the user request.
 
@@ -222,48 +221,48 @@ The HTML must be ready to render as-is in a browser.
     });
 
     const message = codeResponse?.choices?.[0]?.message;
-const rawContent = message?.content;
+    const rawContent = message?.content;
 
-// ensure AI returned string content
-if (typeof rawContent !== 'string') {
-  throw new Error('CODE_AI_GENERATION_FAILED');
-}
+    // ensure AI returned string content
+    if (typeof rawContent !== 'string') {
+      throw new Error('CODE_AI_GENERATION_FAILED');
+    }
 
-// clean markdown fences if present
-const cleanCode = rawContent
-  .replace(/```[a-z]*\n?/gi, '')
-  .replace(/```$/g, '')
-  .trim();
+    // clean markdown fences if present
+    const cleanCode = rawContent
+      .replace(/```[a-z]*\n?/gi, '')
+      .replace(/```$/g, '')
+      .trim();
 
-// validate HTML output
-if (!cleanCode.startsWith('<!DOCTYPE html')) {
-  throw new Error('INVALID_HTML_FROM_AI');
-}
-const version = {
-  code: cleanCode,
-  description: 'Initial_version',
-};
+    // validate HTML output
+    if (!cleanCode.startsWith('<!DOCTYPE html')) {
+      throw new Error('INVALID_HTML_FROM_AI');
+    }
+    const version = {
+      code: cleanCode,
+      description: 'Initial_version',
+    };
 
-project.versions.push(version);
-project.current_code = cleanCode;
+    project.versions.push(version);
+    project.current_code = cleanCode;
 
-const savedVersion = project.versions[project.versions.length - 1];
-project.current_version_index = savedVersion._id.toString();
+    const savedVersion = project.versions[project.versions.length - 1];
+    project.current_version_index = savedVersion._id.toString();
 
-project.conversations.push({
-  role: 'assistant',
-  content: "I've created your website! You can now preview it and request changes.",
-});
+    project.conversations.push({
+      role: 'assistant',
+      content: "I've created your website! You can now preview it and request changes.",
+    });
 
-await project.save();
+    await project.save();
 
-return res.status(201).json({
-  success: true,
-  project,
-  message: 'Website created successfully',
-});
+    return res.status(201).json({
+      success: true,
+      project,
+      message: 'Website created successfully',
+    });
 
-     
+
   } catch (error) {
     await User.findByIdAndUpdate(userId, {
       $inc: { credits: 5 },
@@ -273,7 +272,7 @@ return res.status(201).json({
     res.status(500).json({ message: error.message });
   }
 };
- 
+
 /* =========================
    Get Single User Project
 ========================= */
@@ -312,7 +311,7 @@ export const getUserProjects = async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 3;
     const skip = (page - 1) * limit;
- 
+
     const [projects, total] = await Promise.all([
       WebsiteProject.find({ userId: userId })
         .sort({ createdAt: -1 })

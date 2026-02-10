@@ -63,30 +63,29 @@ export const makeRevision = async (req, res) => {
     // -------------------------
     // Enhance prompt
     // -------------------------
-      
-        const ai = new GoogleGenAI({ apiKey: process.env.GEMNI });
-        
-       async function generateAIResponse(prompt) {
-      try {
-        const response = await ai.models.generateContent({
-          model: "gemini-2.5-flash",
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: prompt }]
-            }
-          ],
-        });
-    
-        return response.text;
-      } catch (error) {
-        console.error("Error generating AI response:", error);
-        return "Sorry, I'm having trouble responding right now. Please try again later.";
+
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMNI });
+
+    async function generateAIResponse(prompt) {
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }]
+          }
+        ],
+      });
+
+      if (!response.text || !response.text.trim()) {
+        throw new Error("GEMINI_RETURNED_EMPTY_RESPONSE");
       }
+
+      return response.text;
     }
-    
-    
-         const prompt = `You are a prompt enhancement specialist. The user wants to make changes to their website.
+
+
+    const prompt = `You are a prompt enhancement specialist. The user wants to make changes to their website.
 
 Enhance the request by:
 1. Being specific about elements to change
@@ -96,11 +95,11 @@ Enhance the request by:
 
 user request = ${message}
 Return ONLY the enhanced request (2–3 sentences).`;
-    
-       const enhanceResponse = await generateAIResponse(prompt);
-    if(enhanceResponse){
+
+    const enhanceResponse = await generateAIResponse(prompt);
+    if (enhanceResponse) {
     }
-        const enhancedPrompt = enhanceResponse
+    const enhancedPrompt = enhanceResponse
 
     if (!enhancedPrompt) {
       throw new Error("Prompt enhancement failed");
@@ -118,13 +117,13 @@ Return ONLY the enhanced request (2–3 sentences).`;
     );
 
     await project.save();
- 
+
     return res.status(201).json({
-  success: true,
-  enhanceResponse,
-  project:project,
-  message: 'Enhanced prompt successfully',
-});
+      success: true,
+      enhanceResponse,
+      project: project,
+      message: 'Enhanced prompt successfully',
+    });
   } catch (error) {
     console.error(error);
 
@@ -177,7 +176,7 @@ export const makeRevisionCode = async (req, res) => {
 
     user.credits -= 5;
     await user.save();
-    
+
     const enhancedPrompt = enhanceResponse
 
     if (!enhancedPrompt) {
@@ -250,9 +249,9 @@ CRITICAL REQUIREMENTS:
     // -------------------------
     res.json({
       success: true,
-       project,
-       message: "Changes made successfully" 
-      });
+      project,
+      message: "Changes made successfully"
+    });
   } catch (error) {
     console.error(error);
 
@@ -314,10 +313,10 @@ export const rollbackToVersion = async (req, res) => {
 
     await project.save();
 
-    res.json({ 
+    res.json({
       message: "Version rolled back successfully",
-    project
-   });
+      project
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -392,12 +391,12 @@ export const getPublishedProjects = async (req, res) => {
     const skip = (page - 1) * limit;
 
     const [projects, total] = await Promise.all([
-          WebsiteProject.find({ isPublished: true })
-           .populate("userId", "name email")
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit)
-        ]);
+      WebsiteProject.find({ isPublished: true })
+        .populate("userId", "name email")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+    ]);
 
     res.json({
       projects,
@@ -439,13 +438,13 @@ export const saveProjectCode = async (req, res) => {
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
- 
+
     project.current_code = code;
     project.current_version_index = "";
 
     await project.save();
 
-    res.json({ message: "Project saved successfully",  project});
+    res.json({ message: "Project saved successfully", project });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -463,7 +462,7 @@ export const getPublishedProjectById = async (req, res) => {
       isPublished: true,
       current_code: { $ne: "" }
     }).populate("userId", "name");
-    
+
 
     if (!project) {
       return res.status(404).json({ message: "Project not found" });

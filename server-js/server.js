@@ -19,6 +19,12 @@ if (!process.env.JWT_SECRET) {
   console.error("FATAL: JWT_SECRET environment variable is not set. Server cannot start securely.");
   process.exit(1);
 }
+if (!process.env.GEMNI) {
+  console.warn("WARNING: GEMNI environment variable is not set. Gemini AI features will fail.");
+}
+if (!process.env.AI_API_KEY) {
+  console.warn("WARNING: AI_API_KEY environment variable is not set. Code generation will fail.");
+}
 
 /* -------------------- DB -------------------- */
 mongoose
