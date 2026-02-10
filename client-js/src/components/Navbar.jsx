@@ -47,7 +47,7 @@ const Navbar = () => {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className={`
           max-w-7xl mx-auto flex items-center justify-between
-          px-6 py-3 rounded-2xl
+          px-6 py-3 rounded-4xl
           transition-all duration-500
           ${scrolled
             ? 'bg-black/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)]'
