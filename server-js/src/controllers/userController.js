@@ -73,21 +73,22 @@ export const createUserProject = async (req, res) => {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMNI });
 
     async function generateAIResponse(prompt) {
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: prompt }]
-          }
-        ],
-      });
+      try {
+        const response = await ai.models.generateContent({
+          model: "gemini-2.5-flash",
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: prompt }]
+            }
+          ],
+        });
 
-      if (!response.text || !response.text.trim()) {
-        throw new Error("GEMINI_RETURNED_EMPTY_RESPONSE");
+        return response.text?.trim() || null;
+      } catch (error) {
+        console.error("Gemini AI error:", error.message);
+        return null;
       }
-
-      return response.text;
     }
 
 
@@ -105,13 +106,7 @@ here is user prompt ${initial_prompt}
 Return ONLY the enhanced prompt, nothing else. Make it detailed but concise (1-2 paragraphs max).`;
 
     const enhanceResponse = await generateAIResponse(prompt);
-
-    const enhancedPrompt = enhanceResponse
-    if (!enhanceResponse || !enhanceResponse.trim()) {
-      throw new Error('GEMINI_AI_GENERATION_FAILED');
-    }
-    if (enhanceResponse) {
-    }
+    const enhancedPrompt = enhanceResponse || initial_prompt;
 
     project.conversations.push(
       {

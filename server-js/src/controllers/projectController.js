@@ -67,21 +67,22 @@ export const makeRevision = async (req, res) => {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMNI });
 
     async function generateAIResponse(prompt) {
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: prompt }]
-          }
-        ],
-      });
+      try {
+        const response = await ai.models.generateContent({
+          model: "gemini-2.5-flash",
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: prompt }]
+            }
+          ],
+        });
 
-      if (!response.text || !response.text.trim()) {
-        throw new Error("GEMINI_RETURNED_EMPTY_RESPONSE");
+        return response.text?.trim() || null;
+      } catch (error) {
+        console.error("Gemini AI error:", error.message);
+        return null;
       }
-
-      return response.text;
     }
 
 
@@ -97,13 +98,7 @@ user request = ${message}
 Return ONLY the enhanced request (2–3 sentences).`;
 
     const enhanceResponse = await generateAIResponse(prompt);
-    if (enhanceResponse) {
-    }
-    const enhancedPrompt = enhanceResponse
-
-    if (!enhancedPrompt) {
-      throw new Error("Prompt enhancement failed");
-    }
+    const enhancedPrompt = enhanceResponse || message;
 
     project.conversations.push(
       {
