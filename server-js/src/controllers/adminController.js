@@ -40,11 +40,11 @@ export const signup = async (req, res) => {
     // Auto-login: set cookie after signup
     const token = jwt.sign(
       { userId: user._id },
-      process.env.JWT_SECRET || "jatin",
+      process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
 
-    res.status(201).cookie("token", token, COOKIE_OPTIONS).json({
+    res.status(201).cookie("admin_token", token, COOKIE_OPTIONS).json({
       message: "Signup successful",
       user: {
         id: user._id,
@@ -86,13 +86,13 @@ export const login = async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id },
-      process.env.JWT_SECRET || "jatin",
+      process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
 
     res
       .status(200)
-      .cookie("token", token, COOKIE_OPTIONS)
+      .cookie("admin_token", token, COOKIE_OPTIONS)
       .json({
         message: "Login successful",
         user: {
@@ -110,7 +110,7 @@ export const login = async (req, res) => {
 /* ================= LOGOUT ================= */
 export const logout = async (_req, res) => {
   res
-    .clearCookie("token", {
+    .clearCookie("admin_token", {
       httpOnly: true,
       secure: true,
       sameSite: "None",

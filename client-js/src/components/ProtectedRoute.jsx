@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const ProtectedRoute = () => {
-  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
+  const { user, loading } = useSelector((state) => state.auth);
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="flex flex-col items-center gap-4">
@@ -16,7 +16,7 @@ const ProtectedRoute = () => {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 

@@ -14,6 +14,12 @@ import adminRouter from "./src/routes/authAdmin.js";
 const app = express();
 const port = process.env.PORT || 3000;
 
+/* -------------------- Startup Guards -------------------- */
+if (!process.env.JWT_SECRET) {
+  console.error("FATAL: JWT_SECRET environment variable is not set. Server cannot start securely.");
+  process.exit(1);
+}
+
 /* -------------------- DB -------------------- */
 mongoose
   .connect(process.env.DATABASE_URL)

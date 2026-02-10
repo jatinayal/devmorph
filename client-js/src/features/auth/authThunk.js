@@ -61,13 +61,13 @@ export const fetchMe = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   'auth/logout',
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const res = await fetch(`${API}/auth/logout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(),
+        body: JSON.stringify({}),
       });
 
       const data = await res.json();

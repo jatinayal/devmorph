@@ -48,27 +48,29 @@ const authSlice = createSlice({
 
       // FETCH ME
       .addCase(fetchMe.pending, (state) => {
-       state.loading = true;
+        state.loading = true;
       })
       .addCase(fetchMe.fulfilled, (state, action) => {
         state.loading = false;
-       state.user = action.payload;
+        state.user = action.payload;
       })
       .addCase(fetchMe.rejected, (state) => {
-      state.loading = false;
-       state.user = null;
+        state.loading = false;
+        state.user = null;
       })
-    // LOGOUT
+      // LOGOUT
       .addCase(logoutUser.pending, state => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(logoutUser.fulfilled, (state, action) => {
+      .addCase(logoutUser.fulfilled, (state) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = null;
+        state.error = null;
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
+        state.user = null;
         state.error = action.payload;
       })
   },

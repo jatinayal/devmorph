@@ -20,6 +20,7 @@ import AdminLogin from "./pages/adminlogin";
 import AdminSignup from "./pages/adminSignup";
 import AdminDashboard from "./pages/adminDashboard";
 import Mobile from "./pages/Mobile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import { BlurBackground } from "./components/ui/BlurBackground";
 import { Toaster } from "react-hot-toast";
@@ -65,11 +66,12 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        <Route path="/projects" element={<MyProjects />} />
-        <Route path="/projects/:projectId" element={<Projects />} />
-
-        <Route path="/preview/:projectId" element={<Preview />} />
-        <Route path="/preview/:projectId/:versionId" element={<Preview />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/projects" element={<MyProjects />} />
+          <Route path="/projects/:projectId" element={<Projects />} />
+          <Route path="/preview/:projectId" element={<Preview />} />
+          <Route path="/preview/:projectId/:versionId" element={<Preview />} />
+        </Route>
 
         <Route path="/morphspace" element={<Community />} />
         <Route path="/view/:projectId" element={<View />} />

@@ -37,7 +37,7 @@ export const signup = async (req, res) => {
     // Auto-login: set cookie after signup
     const token = jwt.sign(
       { userId: user._id },
-      process.env.JWT_SECRET || "jatin",
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -83,7 +83,7 @@ export const login = async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id },
-      process.env.JWT_SECRET || "jatin",
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 

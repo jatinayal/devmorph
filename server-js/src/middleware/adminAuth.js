@@ -3,7 +3,7 @@ import Admin from "../models/Admin.js";
 
 export const adminProtect = async (req, res, next) => {
   try {
-    const token = req.cookies?.token;
+    const token = req.cookies?.admin_token;
 
     if (!token) {
       return res.status(401).json({ message: "Authorization token missing" });
@@ -11,7 +11,7 @@ export const adminProtect = async (req, res, next) => {
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || "jatin"
+      process.env.JWT_SECRET
     );
 
     const admin = await Admin.findOne({ _id: decoded.userId });

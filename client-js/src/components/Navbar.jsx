@@ -27,8 +27,9 @@ const Navbar = () => {
   }, [])
 
   const handleLogout = () => {
-    dispatch(logoutUser())
-    window.location.reload()
+    dispatch(logoutUser()).then(() => {
+      navigate('/')
+    })
   }
 
   const navItems = [
