@@ -18,7 +18,7 @@ const AdminSignup = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3000/api/admin/signup", {
+      const res = await fetch("https://devmorphs.onrender.com/api/admin/signup", {
         method: "POST",
         credentials: "include", // 🔥 cookie-based auth
         headers: {
