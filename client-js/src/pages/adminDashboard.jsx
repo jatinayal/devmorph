@@ -50,7 +50,7 @@ const AdminDashboard = () => {
                         create new admin
                       </button>
         <h1 className="text-3xl font-bold">
-          Payments Dashboard
+          Hello Admin!
         </h1>
 
         <div className="flex gap-4 mt-4 md:mt-0">
