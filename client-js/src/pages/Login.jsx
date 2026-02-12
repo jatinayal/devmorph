@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../features/auth/authThunk';
 import { clearError } from '../features/auth/authSlice';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Loader2, Mail, Lock, Sparkles } from 'lucide-react';
 
 const Login = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
   const { user, loading, error } = useSelector((state) => state.auth);
 
@@ -17,10 +18,14 @@ const Login = () => {
   const [turnstileLoading, setTurnstileLoading] = useState(true);
   const turnstileRef = useRef(null);
 
+const from = location.state?.from?.pathname || "/";
+
   useEffect(() => {
-    if (user) navigate('/');
+      if (user) {
+    navigate(from, { replace: true });
+  }
     return () => dispatch(clearError());
-  }, [user, navigate, dispatch]);
+  }, [user, navigate, from, dispatch]);
 
   // Load Cloudflare Turnstile
   useEffect(() => {
