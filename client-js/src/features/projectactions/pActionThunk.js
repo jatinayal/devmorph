@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API = import.meta.env.VITE_API_URL || 'https://devmorphs.onrender.com/api';
 
 
 export const saveProject = createAsyncThunk(
