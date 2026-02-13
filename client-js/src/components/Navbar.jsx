@@ -37,7 +37,7 @@ const Navbar = () => {
     { name: 'MorphSpace', path: '/morphspace' },
     { name: 'Docs', path: '/docs' },
     { name: 'About', path: '/about' },
-    { name: 'Pricing', path: '/pricing' }
+    { name: 'Contact', path: '/contact' }
   ]
 
   return (
@@ -139,7 +139,7 @@ const Navbar = () => {
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center gap-2 py-1.5 px-3 rounded-full hover:bg-white/10 transition-all border border-transparent hover:border-white/10"
                 >
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-lime-400 to-emerald-500 flex items-center justify-center text-black font-black text-xs uppercase">
+                  <div className="w-7 h-7 rounded-full bg-linear-to-tr from-lime-400 to-emerald-500 flex items-center justify-center text-black font-black text-xs uppercase">
                     {(user.fullName || user.name || 'U').charAt(0)}
                   </div>
                   <span className="text-sm font-semibold text-white/90">{user.fullName || user.name}</span>
@@ -152,7 +152,7 @@ const Navbar = () => {
                       initial={{ opacity: 0, y: 10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className="absolute right-0 mt-3 w-56 rounded-2xl bg-black/80 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden z-[60]"
+                      className="absolute right-0 mt-3 w-56 rounded-2xl bg-black/80 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden z-60"
                     >
                       <div className="px-4 py-3 border-b border-white/10">
                         <p className="text-xs text-white/40 uppercase tracking-wider font-bold">Account</p>

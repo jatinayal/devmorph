@@ -13,6 +13,7 @@ import View from "./pages/View";
 import Docs from "./pages/Docs";
 import Navbar from "./components/Navbar";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
 import ProjectShortcut from "./components/ProjectShortcut";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -63,6 +64,7 @@ const App = () => {
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/docs" element={<Docs />} />
         <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 

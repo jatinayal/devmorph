@@ -10,6 +10,7 @@ import userRouter from "./src/routes/userRoutes.js";
 import projectRouter from "./src/routes/projectRoutes.js";
 import commentRouter from "./src/routes/comment.routes.js";
 import adminRouter from "./src/routes/authAdmin.js";
+import contactRouter from "./src/routes/contactRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -58,6 +59,7 @@ app.use("/api/user", userRouter);
 app.use("/api/project", projectRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/contact", contactRouter);
 
 // const __dirname = path.resolve();
 

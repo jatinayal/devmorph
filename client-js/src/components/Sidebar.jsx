@@ -103,7 +103,7 @@ const timeline = React.useMemo(() => {
       <div className="flex flex-col h-full">
 
         {/* Timeline */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-4 scrollbar-thin scrollbar-thumb-white/10">
+        <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-4 scrollbar-none scrollbar-thin scrollbar-thumb-white/10">
 
          {timeline.map((item, index) => {
   // 🟣 VERSION ITEM

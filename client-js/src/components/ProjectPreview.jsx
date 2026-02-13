@@ -131,7 +131,7 @@ const [loadingTextIndex, setLoadingTextIndex] = useState(0);
     }
 
     return (
-      <div className="flex-1 h-full w-full">
+      <div className="flex-1 h-full w-full ">
         {project.current_code ? (
           <>
             <iframe
