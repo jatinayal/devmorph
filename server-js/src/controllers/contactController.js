@@ -1,15 +1,27 @@
-
 import nodemailer from "nodemailer";
 import path from "path";
 
-// Configure Nodemailer transporter
-// Using environment variables for secure credential management
+// Configure Nodemailer transporter for Brevo (Transactional SMTP)
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.SMTP_HOST || "smtp-relay.brevo.com",
+  port: Number(process.env.SMTP_PORT) || 587,
+  secure: false, // must be false for port 587 (STARTTLS)
   auth: {
-    user: process.env.SMTP_USER, // Your Gmail address
-    pass: process.env.SMTP_PASS, // Your App Password
+    user: process.env.SMTP_USER, // Brevo SMTP login (e.g. a24cf2001@smtp-brevo.com)
+    pass: process.env.SMTP_PASS, // Brevo SMTP key
   },
+  tls: {
+    rejectUnauthorized: false, // helps avoid TLS issues on some cloud hosts
+  },
+});
+
+// Optional but recommended: verify connection on startup
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("Brevo SMTP connection error:", error);
+  } else {
+    console.log("Brevo SMTP server is ready to send emails");
+  }
 });
 
 export const submitContactForm = async (req, res) => {
@@ -26,7 +38,7 @@ export const submitContactForm = async (req, res) => {
 
     // HTML Template for Admin Notification
     const adminMailOptions = {
-      from: `"DevMorph Contact" <${process.env.SMTP_USER}>`,
+      from: `"DevMorph Contact" <devmorph.ai@gmail.com>`,
       to: process.env.ADMIN_EMAIL, // Admin email address
       subject: `New Contact Inquiry: ${subject}`,
       html: `
@@ -41,10 +53,10 @@ export const submitContactForm = async (req, res) => {
         </div>
       `,
     };
-
+ 
     // HTML Template for User Confirmation
     const userMailOptions = {
-      from: `"DevMorph Team" <${process.env.SMTP_USER}>`,
+      from: `"DevMorph Team" <devmorph.ai@gmail.com>`,
       to: email,
       subject: "We received your message!",
       html: `
