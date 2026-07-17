@@ -175,7 +175,7 @@ export const createProjectCode = async (req, res) => {
 
     /* ===== Code Generation ===== */
     const codeResponse = await openai.chat.completions.create({
-      model: "z-ai/glm-4.5-air:free",
+      model: "nvidia/nemotron-3-ultra-550b-a55b:free",
       messages: [
         {
           role: "system",
@@ -211,12 +211,12 @@ The HTML must be ready to render as-is in a browser.
         {
           role: "user",
           content: enhancedPrompt,
-        },
+        }
       ],
+      reasoning: { enabled: true }
     });
 
-    const message = codeResponse?.choices?.[0]?.message;
-    const rawContent = message?.content;
+    const rawContent = codeResponse?.choices?.[0]?.message?.content;
 
     // ensure AI returned string content
     if (typeof rawContent !== 'string') {

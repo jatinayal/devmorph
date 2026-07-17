@@ -181,7 +181,7 @@ export const makeRevisionCode = async (req, res) => {
     // Generate updated website code
     // -------------------------
     const generationResponse = await openai.chat.completions.create({
-      model: "z-ai/glm-4.5-air:free",
+      model: "nvidia/nemotron-3-ultra-550b-a55b:free",
       messages: [
         {
           role: "system",
@@ -195,17 +195,17 @@ CRITICAL REQUIREMENTS:
 - Don't use background image property for images just add img tag with src
 - Use target="_blank" only for external links (e.g., LinkedIn, GitHub, websites outside the page), and keep internal anchor links like #contact, #about, or same-page navigation opening in the same tab.
 - Must be a complete standalone HTML document
-- NO explanations, NO markdown`,
+- NO explanations, NO markdown`
         },
         {
           role: "user",
-          content: `Here is the current website code:\n${project.current_code}\n\nApply this change:\n${enhancedPrompt}`,
-        },
+          content: `Here is the current website code:\n${project.current_code}\n\nApply this change:\n${enhancedPrompt}`
+        }
       ],
+      reasoning: { enabled: true }
     });
 
-    let updatedCode =
-      generationResponse?.choices?.[0]?.message?.content;
+    let updatedCode = generationResponse?.choices?.[0]?.message?.content;
 
     if (!updatedCode) {
       throw new Error("Code generation failed");

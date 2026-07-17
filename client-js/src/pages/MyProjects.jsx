@@ -91,7 +91,7 @@ const handleConfirmDelete = () => {
       <div className="
         relative
         mx-4 mt-4
-        h-36
+        aspect-video
         rounded-2xl
         overflow-hidden
         bg-black
@@ -101,9 +101,9 @@ const handleConfirmDelete = () => {
         {project.current_code ? (
           <iframe
             srcDoc={project.current_code}
-            className="absolute top-0 left-0 w-[1150px] h-[700px] origin-top-left pointer-events-none"
+            className="absolute top-0 left-0 origin-top-left pointer-events-none border-none"
             sandbox="allow-scripts allow-same-origin"
-            style={{ transform: 'scale(0.25)' }}
+            style={{ width: '400%', height: '400%', transform: 'scale(0.25)' }}
           />
         ) : (
           <div className="flex items-center justify-center h-full text-white/40 text-sm">

@@ -89,18 +89,14 @@ const timeline = React.useMemo(() => {
 
 
   return (
-    <div
-      className={`
-        h-full sm:max-w-sm
-        rounded-2xl
-        bg-white/5 backdrop-blur-xl
-        border border-white/10
-        shadow-[0_20px_60px_rgba(0,0,0,0.45)]
-        transition-all duration-300
-        ${isMenuOpen ? 'max-sm:w-0 overflow-hidden' : 'w-full'}
-      `}
-    >
-      <div className="flex flex-col h-full">
+    <div className="h-full w-full bg-[#111111] flex flex-col transition-all duration-300 overflow-hidden">
+      <div className="flex-none px-4 py-3 border-b border-white/10 bg-black/40">
+        <h2 className="text-sm font-semibold text-white/80 uppercase tracking-wider flex items-center gap-2">
+          <BotIcon size={16} className="text-lime-400" />
+          AI Assistant
+        </h2>
+      </div>
+      <div className="flex flex-col flex-1 overflow-hidden">
 
         {/* Timeline */}
         <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-4 scrollbar-none scrollbar-thin scrollbar-thumb-white/10">
@@ -195,7 +191,7 @@ const timeline = React.useMemo(() => {
         {/* Input */}
         <form
           onSubmit={handleRevision}
-          className="relative bg-white/10 backdrop-blur-lg border border-white/15 rounded-2xl m-2 p-2 focus-within:ring-2 ring-lime-400/50 transition"
+          className="relative bg-[#1a1a1a] border-t border-white/10 p-3 focus-within:bg-[#222222] transition-colors"
         >
           <textarea
             value={input}
@@ -203,17 +199,17 @@ const timeline = React.useMemo(() => {
             rows={4}
             disabled={isGenerating}
             placeholder="Describe your website or request changes..."
-            className="w-full resize-none bg-transparent outline-none text-white placeholder:text-white/40"
+            className="w-full resize-none bg-transparent outline-none text-white placeholder:text-white/40 text-sm p-1 pr-12"
           />
 
           <button
             disabled={isGenerating || !input.trim()}
-            className="absolute bottom-3 right-3 rounded-full bg-lime-400 text-black shadow-[0_0_15px_rgba(163,230,53,0.6)] hover:bg-lime-300 transition disabled:opacity-40"
+            className="absolute bottom-4 right-4 rounded-md bg-lime-400 text-black shadow-[0_0_15px_rgba(163,230,53,0.3)] hover:bg-lime-500 transition disabled:opacity-40"
           >
             {isGenerating ? (
-              <Loader2Icon className="size-7 p-1.5 animate-spin" />
+              <Loader2Icon className="size-8 p-1.5 animate-spin" />
             ) : (
-              <SendIcon className="size-7 p-1.5" />
+              <SendIcon className="size-8 p-1.5" />
             )}
           </button>
         </form>

@@ -84,6 +84,18 @@ const [loadingTextIndex, setLoadingTextIndex] = useState(0);
         doc.getElementById('ai-preview-script')?.remove()
 
         return doc.documentElement.outerHTML
+      },
+      updateElement: (updates) => {
+        iframeRef.current?.contentWindow?.postMessage(
+          { type: 'UPDATE_ELEMENT', payload: updates },
+          '*'
+        )
+      },
+      clearSelection: () => {
+        iframeRef.current?.contentWindow?.postMessage(
+          { type: 'CLEAR_SELECTION_REQUEST' },
+          '*'
+        )
       }
     }))
 
@@ -131,29 +143,22 @@ const [loadingTextIndex, setLoadingTextIndex] = useState(0);
     }
 
     return (
-      <div className="flex-1 h-full w-full ">
+      <div className="flex-1 h-full w-full flex justify-center bg-gray-50/50 overflow-hidden relative">
         {project.current_code ? (
           <>
             <iframe
-  ref={iframeRef}
-  srcDoc={injectPreview(project.current_code)}
-  className={`w-full h-screen ${resolutions[device]} mx-auto border-none`}
-  sandbox="allow-scripts allow-same-origin"
-/>
+              ref={iframeRef}
+              srcDoc={injectPreview(project.current_code)}
+              className={`h-full border-none transition-all duration-300 ease-in-out bg-white ${
+                device === 'phone' 
+                  ? 'w-[412px] shadow-2xl border-x border-black/10' 
+                  : device === 'tablet' 
+                    ? 'w-[768px] shadow-2xl border-x border-black/10' 
+                    : 'w-full'
+              }`}
+              sandbox="allow-scripts allow-same-origin"
+            />
 
-            {showEditorPanel && selectedElement && (
-              <EditorPanel
-                selectedElement={selectedElement}
-                onUpdate={handleUpdate}
-                onClose={() => {
-                  setSelectedElement(null)
-                  iframeRef.current?.contentWindow?.postMessage(
-                    { type: 'CLEAR_SELECTION_REQUEST' },
-                    '*'
-                  )
-                }}
-              />
-            )}
           </>
         ) : (
           isGenerating && <div className="h-full w-full flex flex-col items-center justify-center gap-4 text-indigo-200">
